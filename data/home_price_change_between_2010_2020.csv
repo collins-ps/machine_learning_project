@@ -1,4 +1,4 @@
-,RegionID,SizeRank,RegionName,RegionType,StateName,State,City,Metro,CountyName,31/1/2010,31/1/2020,change,change_perc
+,RegionID,SizeRank,RegionName,RegionType,StateName,State,City,Metro,CountyName,31/1/2010,31/1/2020,home_price_change,home_price_change_percent
 1,84654,1,60657,Zip,IL,IL,Chicago,Chicago-Naperville-Elgin,Cook County,427929,483831,0.13063382,13.06338201
 4,84616,4,60614,Zip,IL,IL,Chicago,Chicago-Naperville-Elgin,Cook County,543934,624636,0.148367265,14.83672651
 9,84640,9,60640,Zip,IL,IL,Chicago,Chicago-Naperville-Elgin,Cook County,283836,304706,0.073528376,7.352837554
