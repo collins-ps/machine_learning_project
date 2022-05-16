@@ -1,5 +1,6 @@
-# perceptrons
-CAPP 30254 Machine Learning Final Project
+# the perceptrons
+## CAPP 30254 Machine Learning Final Project
+### Team Members: Claire Hemmerly, Dustin Marshall, Phoebe Collins, Sabrina Yusoff, Yuki Chong
 
 Datasets explored:
 - Race (% White)
