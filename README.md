@@ -8,7 +8,10 @@ Datasets explored:
 - Education (% High school graduate or higher)
 - Education (% Bachelor’s degree or higher)
 - Median Home Value
-- Median Rent Value - excluded for preliminary model
+- Median Rent Value - excluded for baseline model
+- Median Household Income - excluded for baseline model
+- AirBnb Reviews - excluded for baseline model
+- City of Chicago Building Permits - excluded for baseline model
 
 Submissions:
 - Literature Review
