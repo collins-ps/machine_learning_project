@@ -4,7 +4,7 @@ import plotly.express as px
 import numpy as np
 import os
 
-path = os.path.join(os.getcwd(),'data_clean')
+path = os.path.join(os.getcwd(),'perceptrons','data_clean')
 data = pd.read_csv(os.path.join(path, "home_value.csv"))
 renamed_geoid = []
 for row in data['GEOID']:
@@ -27,7 +27,7 @@ data_2019 = data[data['YEAR'] == 2019].reset_index()
 
 data_2019['ratio'] = np.log(data_2019['house_value']/data_2016['house_value'])
 
-with open('tracts.geojson') as file:
+with open(os.path.join(os.getcwd(),'perceptrons', 'tracts.geojson')) as file:
         tracts = json.load(file)
     
 fig = px.choropleth_mapbox(data_2019, geojson=tracts, locations='GEOID', 
