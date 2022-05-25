@@ -4,7 +4,7 @@ import plotly.express as px
 import numpy as np
 import os
 
-path = os.path.join(os.getcwd(),'perceptrons','data_clean')
+path = os.path.join(os.getcwd(),'data_clean')
 data = pd.read_csv(os.path.join(path, "home_value.csv"))
 renamed_geoid = []
 for row in data['GEOID']:
@@ -25,17 +25,51 @@ data_2017 = data[data['YEAR'] == 2017].reset_index()
 data_2018 = data[data['YEAR'] == 2018].reset_index()
 data_2019 = data[data['YEAR'] == 2019].reset_index()
 
-data_2019['ratio'] = np.log(data_2019['house_value']/data_2016['house_value'])
+data_2019['ratio_lg_18_16'] = np.log(data_2018['house_value']/data_2016['house_value']) # y variable
+data_2019['ratio_18_16'] = data_2018['house_value']/data_2016['house_value'] # y variable
 
-with open(os.path.join(os.getcwd(),'perceptrons', 'tracts.geojson')) as file:
-        tracts = json.load(file)
+
+
+# data_2019['ratio_19_17'] = np.log(data_2019['house_value']/data_2017['house_value']) # y variable
+# data_2019['ratio_19_18'] = np.log(data_2019['house_value']/data_2018['house_value']) # y variable
+# data_2019['ratio_abs_19_16'] = data_2019['house_value']/data_2016['house_value'] # y variable
+# data_2019['ratio_abs_19_17'] = np.log(data_2019['house_value']/data_2017['house_value']) # y variable
+# data_2019['ratio_abs_19_18'] = np.log(data_2019['house_value']/data_2018['house_value']) # y variable
+
+# with open(os.path.join(os.getcwd(),'tracts.geojson')) as file:
+#         tracts = json.load(file)
     
-fig = px.choropleth_mapbox(data_2019, geojson=tracts, locations='GEOID', 
-                                featureidkey="properties.geoid10",
-                                color = data_2019['ratio'],                                 
-                                mapbox_style="carto-positron",
-                                zoom=9, center = {"lat": 41.81, "lon": -87.7},
-                                opacity=0.5,
-                                labels={})
+# fig = px.choropleth_mapbox(data_2019, geojson=tracts, locations='GEOID', 
+#                                 featureidkey="properties.geoid10",
+#                                 color = data_2019['ratio'],                                 
+#                                 mapbox_style="carto-positron",
+#                                 zoom=9, center = {"lat": 41.81, "lon": -87.7},
+#                                 opacity=0.5,
+#                                 labels={})
 
-fig.show()
+#fig.show()
+
+# print("lg 2019/2016", data_2019.sort_values(by = ['ratio'], ascending=False).head())
+# print("lg 2019/2017", data_2019.sort_values(by = ['ratio_19_17'], ascending=False))
+# print("lg 2019/2018", data_2019.sort_values(by = ['ratio_19_18'], ascending=False))
+# print("2019/2016", data_2019.sort_values(by = ['ratio_abs_19_16'], ascending=False))
+# print("2019/2017", data_2019.sort_values(by = ['ratio_abs_19_17'], ascending=False))
+# print("2019/2018", data_2019.sort_values(by = ['ratio_abs_19_18'], ascending=False))
+
+gentrification_data = pd.read_csv(os.path.join('data_clean','chicago.csv'))
+
+top_y_values_lg = data_2019.nlargest(20, ['ratio_lg_18_16'])
+top_y_values = data_2019.nlargest(20, ['ratio_18_16'])
+
+gent_data_grouped = gentrification_data.groupby('Typology')
+
+dict = {}
+
+for name, group in gent_data_grouped:
+    dict[name] = 0
+    for value in top_y_values_lg['GEOID']:
+        the_list = group['GEOID'].tolist()
+        if value in the_list:
+            dict[name] += 1
+
+print(dict)
