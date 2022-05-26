@@ -25,14 +25,25 @@ data_2017 = data[data['YEAR'] == 2017].reset_index()
 data_2018 = data[data['YEAR'] == 2018].reset_index()
 data_2019 = data[data['YEAR'] == 2019].reset_index()
 
-data_2019['ratio'] = np.log(data_2019['house_value']/data_2016['house_value']) # y variable
+data_2019 = data_2019.rename(columns = {"house_value": "house_value_2019"})
+data_2016 = data_2016.rename(columns = {"house_value": "house_value_2016"})
+
+y_labels = pd.merge(data_2016, data_2019, on = ['GEOID'])
+median_house_val_ratio = data_2019['house_value_2019'].median() / data_2016['house_value_2016'].median()
+median_house_val_2016 = data_2016['house_value_2016'].median()
+
+y_labels['ratio'] = y_labels['house_value_2019'] / y_labels['house_value_2016']
+y_labels['label'] = np.where((y_labels['house_value_2016'] < median_house_val_2016) & (y_labels['ratio'] >  median_house_val_ratio), 1, 0)
+y_labels = y_labels[['GEOID', 'label']]
+
+#data_2019['ratio'] = np.log(data_2019['house_value']/data_2016['house_value']) # y variable
 
 with open(os.path.join(os.getcwd(),'tracts.geojson')) as file:
         tracts = json.load(file)
     
-fig = px.choropleth_mapbox(data_2019, geojson=tracts, locations='GEOID', 
+fig = px.choropleth_mapbox(y_labels, geojson=tracts, locations='GEOID', 
                                 featureidkey="properties.geoid10",
-                                color = data_2019['ratio'],                                 
+                                color = y_labels['label'],                                 
                                 mapbox_style="carto-positron",
                                 zoom=9, center = {"lat": 41.81, "lon": -87.7},
                                 opacity=0.5,
