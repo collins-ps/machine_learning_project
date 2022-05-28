@@ -50,3 +50,24 @@ fig = px.choropleth_mapbox(y_labels, geojson=tracts, locations='GEOID',
                                 labels={})
 
 fig.show()
+
+displ = pd.read_csv(os.path.join(path, "chicago.csv"))
+
+displ['binary'] = 'Stable'
+displ.loc[displ['Typology'] == 'At Risk of Gentrification', 'binary'] = 'Gentrifying'
+displ.loc[displ['Typology'] == 'Early/Ongoing Gentrification', 'binary'] = 'Gentrifying'
+displ.loc[displ['Typology'] == 'Low-Income/Susceptible to Displacement', 'binary'] = 'Gentrifying'
+displ.loc[displ['Typology'] == 'Ongoing Displacement', 'binary'] = 'Gentrifying'
+
+displ.loc[displ['Typology'] != 'At Risk of Gentrification' and displ['Typology'] != 'Early/Ongoing Gentrification', 'binary'] = 'Stable' 
+
+
+fig2 = px.choropleth_mapbox(displ, geojson=tracts, locations='GEOID', 
+                                featureidkey="properties.geoid10",
+                                color = displ['binary'],                                 
+                                mapbox_style="carto-positron",
+                                zoom=9, center = {"lat": 41.81, "lon": -87.7},
+                                opacity=0.5,
+                                labels={})
+
+fig2.show()
